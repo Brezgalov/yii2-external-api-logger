@@ -1,0 +1,41 @@
+{
+  "name": "brezgalov/yii2-external-api-logger",
+  "description": "logger for api requests",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oleg Brezgalov",
+      "email": "oleg.brezgalov@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "yiisoft/yii2": ">=2.0.6",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit test",
+    "test-coverage": "./vendor/bin/phpunit test --coverage-html coverage"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Brezgalov\\ExtApiLogger\\": "src/",
+      "Brezgalov\\ExtApiLogger\\Tests\\": "test/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true
+    }
+  }
+}
