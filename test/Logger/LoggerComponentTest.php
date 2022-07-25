@@ -65,7 +65,7 @@ class LoggerComponentTest extends BaseTestCase
         $requestSentEvent = $this->_getDemoEventExternalApiRequestSent('logApiRequestBehavior-test-1', $requestTime);
 
         \Yii::$app->trigger(
-            LogApiRequestBehavior::EVENT_EXTERNAL_API_REQUEST_SENT,
+            LoggerComponent::EVENT_EXTERNAL_API_REQUEST_SENT,
             $requestSentEvent
         );
 
@@ -84,7 +84,7 @@ class LoggerComponentTest extends BaseTestCase
         $responseReceivedEvent = $this->_getDemoEventExternalApiResponseReceived($requestSentEvent->getActivityId(), $responseTime);
 
         \Yii::$app->trigger(
-            LogApiRequestBehavior::EVENT_EXTERNAL_API_RESPONSE_RECEIVED,
+            LoggerComponent::EVENT_EXTERNAL_API_RESPONSE_RECEIVED,
             $responseReceivedEvent
         );
 

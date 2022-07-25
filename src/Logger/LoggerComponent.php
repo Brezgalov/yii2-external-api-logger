@@ -9,6 +9,9 @@ use yii\base\Component;
 
 class LoggerComponent extends Component implements BootstrapInterface
 {
+    const EVENT_EXTERNAL_API_REQUEST_SENT = 'externalApiRequestSent';
+    const EVENT_EXTERNAL_API_RESPONSE_RECEIVED = 'externalApiResponseReceived';
+
     const LOGGER_BEHAVIOR_NAME = 'externalApiLoggerBehavior';
 
     /**

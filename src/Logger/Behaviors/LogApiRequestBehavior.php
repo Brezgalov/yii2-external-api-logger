@@ -4,15 +4,13 @@ namespace Brezgalov\ExtApiLogger\Logger\Behaviors;
 
 use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiRequestSent;
 use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiResponseReceived;
+use Brezgalov\ExtApiLogger\Logger\LoggerComponent;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 
 class LogApiRequestBehavior extends Behavior
 {
-    const EVENT_EXTERNAL_API_REQUEST_SENT = 'externalApiRequestSent';
-    const EVENT_EXTERNAL_API_RESPONSE_RECEIVED = 'externalApiResponseReceived';
-
     const METHOD_LOG_REQUEST_SENT = 'logRequestSent';
     const METHOD_LOG_RESPONSE_RECEIVED = 'logResponseReceived';
 
@@ -46,8 +44,8 @@ class LogApiRequestBehavior extends Behavior
     public function events()
     {
         return [
-            self::EVENT_EXTERNAL_API_REQUEST_SENT => self::METHOD_LOG_REQUEST_SENT,
-            self::EVENT_EXTERNAL_API_RESPONSE_RECEIVED => self::METHOD_LOG_RESPONSE_RECEIVED,
+            LoggerComponent::EVENT_EXTERNAL_API_REQUEST_SENT => self::METHOD_LOG_REQUEST_SENT,
+            LoggerComponent::EVENT_EXTERNAL_API_RESPONSE_RECEIVED => self::METHOD_LOG_RESPONSE_RECEIVED,
         ];
     }
 

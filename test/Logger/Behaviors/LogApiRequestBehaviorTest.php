@@ -3,6 +3,7 @@
 namespace Brezgalov\ExtApiLogger\Tests\Logger\Behaviors;
 
 use Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestBehavior;
+use Brezgalov\ExtApiLogger\Logger\LoggerComponent;
 use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\Tests\BaseTestCase;
 use yii\base\InvalidConfigException;
@@ -54,8 +55,8 @@ class LogApiRequestBehaviorTest extends BaseTestCase
         $eventsList = $behavior->events();
 
         $this->assertCount(2, $eventsList);
-        $this->assertArrayHasKey(LogApiRequestBehavior::EVENT_EXTERNAL_API_REQUEST_SENT, $eventsList);
-        $this->assertArrayHasKey(LogApiRequestBehavior::EVENT_EXTERNAL_API_RESPONSE_RECEIVED, $eventsList);
+        $this->assertArrayHasKey(LoggerComponent::EVENT_EXTERNAL_API_REQUEST_SENT, $eventsList);
+        $this->assertArrayHasKey(LoggerComponent::EVENT_EXTERNAL_API_RESPONSE_RECEIVED, $eventsList);
 
         foreach ($eventsList as $event => $method) {
             $this->assertTrue(method_exists($behavior, $method));
