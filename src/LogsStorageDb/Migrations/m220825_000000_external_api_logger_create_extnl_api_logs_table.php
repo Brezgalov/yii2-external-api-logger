@@ -9,7 +9,7 @@ use yii\db\Migration;
  *
  * @codeCoverageIgnore
  */
-class external_api_logger_create_extnl_api_logs_table extends Migration
+class m220825_000000_external_api_logger_create_extnl_api_logs_table extends Migration
 {
     /**
      * {@inheritdoc}
