@@ -1,6 +1,6 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\LogsStorage\DbStorage\Migrations;
+namespace Brezgalov\ExtApiLogger\LogsStorageDb\Migrations;
 
 use yii\db\Migration;
 

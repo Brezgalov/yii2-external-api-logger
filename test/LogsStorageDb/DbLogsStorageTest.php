@@ -1,11 +1,9 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\Tests\LogsStorage\DbStorage;
+namespace Brezgalov\ExtApiLogger\Tests\LogsStorageDb;
 
-use Brezgalov\ExtApiLogger\LogsStorage\DbStorage\DbLogsStorage;
+use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
-use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
-use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
 use Brezgalov\ExtApiLogger\Tests\BaseTestCase;
 use yii\db\Query;
 
@@ -13,7 +11,7 @@ use yii\db\Query;
  * Class DbLogsStorageTest
  * @package Brezgalov\ExtApiLogger\Tests\LogsStorage\DbStorage
  *
- * @coversDefaultClass \Brezgalov\ExtApiLogger\LogsStorage\DbStorage\DbLogsStorage
+ * @coversDefaultClass \Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb
  */
 class DbLogsStorageTest extends BaseTestCase
 {
@@ -29,14 +27,14 @@ class DbLogsStorageTest extends BaseTestCase
         $db = \Yii::$app->get('db');
         \Yii::$app->clear('db');
 
-        $storage = \Yii::createObject(DbLogsStorage::class);
+        $storage = \Yii::createObject(LogsStorageDb::class);
         $this->assertInstanceOf(ILogsStorage::class, $storage);
 
         $this->assertEmpty($storage->db);
 
         \Yii::$app->set('db', $db);
 
-        $storage = \Yii::createObject(DbLogsStorage::class);
+        $storage = \Yii::createObject(LogsStorageDb::class);
         $this->assertEquals($db, $storage->db);
 
     }
@@ -49,7 +47,7 @@ class DbLogsStorageTest extends BaseTestCase
      */
     public function testingTimeCovertFunc()
     {
-        $storage = \Yii::createObject(DbLogsStorage::class);
+        $storage = \Yii::createObject(LogsStorageDb::class);
 
         $format = $storage->getDateTimeFormat();
 
@@ -71,7 +69,7 @@ class DbLogsStorageTest extends BaseTestCase
      */
     public function testingDataToJsonConvert()
     {
-        $storage = \Yii::createObject(DbLogsStorage::class);
+        $storage = \Yii::createObject(LogsStorageDb::class);
 
         $convertResult = $storage->prepareRequestParams(['test' => 1]);
         $this->assertEquals("{\"test\":1}", $convertResult);
@@ -97,7 +95,7 @@ class DbLogsStorageTest extends BaseTestCase
      */
     public function testingStoreFunctions()
     {
-        $storage = \Yii::createObject(DbLogsStorage::class);
+        $storage = \Yii::createObject(LogsStorageDb::class);
         $storage->db->createCommand()->delete($storage->getLogsTableName())->execute();
 
         $requestTime = time();

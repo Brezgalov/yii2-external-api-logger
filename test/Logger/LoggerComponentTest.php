@@ -4,7 +4,7 @@ namespace Brezgalov\ExtApiLogger\Tests\Logger;
 
 use Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestBehavior;
 use Brezgalov\ExtApiLogger\Logger\LoggerComponent;
-use Brezgalov\ExtApiLogger\LogsStorage\DbStorage\DbLogsStorage;
+use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use Brezgalov\ExtApiLogger\Tests\BaseTestCase;
 use yii\db\Query;
@@ -28,7 +28,7 @@ class LoggerComponentTest extends BaseTestCase
         /** @var LoggerComponent $component */
         $component = \Yii::createObject([
             'class' => LoggerComponent::class,
-            'logsStorage' => DbLogsStorage::class,
+            'logsStorage' => LogsStorageDb::class,
         ]);
 
         $behName = $component->getLoggerBehaviorName();
@@ -50,10 +50,10 @@ class LoggerComponentTest extends BaseTestCase
         /** @var LoggerComponent $component */
         $component = \Yii::createObject([
             'class' => LoggerComponent::class,
-            'logsStorage' => DbLogsStorage::class,
+            'logsStorage' => LogsStorageDb::class,
         ]);
 
-        /** @var DbLogsStorage $storage */
+        /** @var LogsStorageDb $storage */
         $storage = \Yii::createObject($component->logsStorage);
         $storage->db->createCommand()->delete(
             $storage->getLogsTableName()

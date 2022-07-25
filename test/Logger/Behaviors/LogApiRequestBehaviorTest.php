@@ -3,7 +3,7 @@
 namespace Brezgalov\ExtApiLogger\Tests\Logger\Behaviors;
 
 use Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestBehavior;
-use Brezgalov\ExtApiLogger\LogsStorage\DbStorage\DbLogsStorage;
+use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\Tests\BaseTestCase;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -48,7 +48,7 @@ class LogApiRequestBehaviorTest extends BaseTestCase
     {
         $behavior = \Yii::createObject([
             'class' => LogApiRequestBehavior::class,
-            'logsStorage' => DbLogsStorage::class,
+            'logsStorage' => LogsStorageDb::class,
         ]);
 
         $eventsList = $behavior->events();
@@ -73,10 +73,10 @@ class LogApiRequestBehaviorTest extends BaseTestCase
     {
         $behavior = \Yii::createObject([
             'class' => LogApiRequestBehavior::class,
-            'logsStorage' => DbLogsStorage::class,
+            'logsStorage' => LogsStorageDb::class,
         ]);
 
-        $this->assertInstanceOf(DbLogsStorage::class, $behavior->logsStorage);
+        $this->assertInstanceOf(LogsStorageDb::class, $behavior->logsStorage);
         $behavior->logsStorage->db->createCommand()->delete(
             $behavior->logsStorage->getLogsTableName()
         )->execute();

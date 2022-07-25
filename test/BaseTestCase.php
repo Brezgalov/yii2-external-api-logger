@@ -4,7 +4,7 @@ namespace Brezgalov\ExtApiLogger\Tests;
 
 use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiRequestSent;
 use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiResponseReceived;
-use Brezgalov\ExtApiLogger\LogsStorage\DbStorage\DbLogsStorage;
+use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
 use PHPUnit\Framework\TestCase;
@@ -102,9 +102,9 @@ class BaseTestCase extends TestCase
     /**
      * @param array $logData
      * @param LogApiRequestDto $requestDto
-     * @param DbLogsStorage $storage
+     * @param LogsStorageDb $storage
      */
-    protected function _testRequestLogDataDb(array $logData, LogApiRequestDto $requestDto, DbLogsStorage $storage)
+    protected function _testRequestLogDataDb(array $logData, LogApiRequestDto $requestDto, LogsStorageDb $storage)
     {
         $this->assertEquals($requestDto->activityId, $logData['activity_id']);
         $this->assertEquals($requestDto->method, $logData['method']);
@@ -121,9 +121,9 @@ class BaseTestCase extends TestCase
     /**
      * @param array $logData
      * @param LogApiResponseDto $requestDto
-     * @param DbLogsStorage $storage
+     * @param LogsStorageDb $storage
      */
-    protected function _testResponseLogDataDb(array $logData, LogApiResponseDto $requestDto, DbLogsStorage $storage)
+    protected function _testResponseLogDataDb(array $logData, LogApiResponseDto $requestDto, LogsStorageDb $storage)
     {
         $this->assertEquals($requestDto->statusCode, $logData['response_status_code']);
         $this->assertEquals($storage->prepareResponseContent($requestDto->responseContent), $logData['response_content']);

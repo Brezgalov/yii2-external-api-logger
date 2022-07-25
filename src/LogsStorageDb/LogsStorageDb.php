@@ -1,6 +1,6 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\LogsStorage\DbStorage;
+namespace Brezgalov\ExtApiLogger\LogsStorageDb;
 
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
@@ -8,7 +8,7 @@ use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
 use yii\base\Component;
 use yii\db\Connection;
 
-class DbLogsStorage extends Component implements ILogsStorage
+class LogsStorageDb extends Component implements ILogsStorage
 {
     /**
      * @var Connection

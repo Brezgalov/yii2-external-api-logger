@@ -1,7 +1,7 @@
 <?php
 
 use Brezgalov\ExtApiLogger\Logger\LoggerComponent;
-use Brezgalov\ExtApiLogger\LogsStorage\DbStorage\DbLogsStorage;
+use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 
 $dir = __DIR__;
 $dbFile = __DIR__ . '/db.local.php';
