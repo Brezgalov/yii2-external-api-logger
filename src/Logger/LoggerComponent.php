@@ -12,8 +12,6 @@ class LoggerComponent extends Component implements BootstrapInterface
     const EVENT_EXTERNAL_API_REQUEST_SENT = 'externalApiRequestSent';
     const EVENT_EXTERNAL_API_RESPONSE_RECEIVED = 'externalApiResponseReceived';
 
-    const EVENT_DELAY_API_REQUEST_LOG = 'delayApiRequestLog';
-
     const LOGGER_BEHAVIOR_NAME = 'externalApiLoggerBehavior';
 
     /**

@@ -73,7 +73,7 @@ You could use `uniqid()` instead of activity-id lib, or any unique identifier yo
 While you log api request inside transaction - any error could ruin yor log info.
 **LogApiRequestDelayedBehavior** is an option to escape such issue.
 
-Modify your component setup to:
+Replace your component setup with:
 
     [
         bootstrap' => [
@@ -81,13 +81,9 @@ Modify your component setup to:
         ],
         'components' => [
             'logger' => [
-                'class' => LoggerComponent::class,
+                'class' => DelayedLoggerComponent::class,
                 'logsStorage' => LogsStorageDb::class,
-                'delayedLoggerBehavior' => [
-                    'class' => LogApiRequestDelayedBehavior::class,
-                    // use any event you prefer
-                    'fireStorageEvent' => \yii\base\Application::EVENT_AFTER_ACTION,
-                ],
+                'fireStorageEvent' => \yii\base\Application::EVENT_AFTER_ACTION,
             ],
         ],
     ],
@@ -99,7 +95,7 @@ Then replace previous logger events trigger code with:
 
         $request = // build \yii\httpclient\Request;
 
-        // create dto to store data
+        // fill up request fields
         $requestLogDto = \Yii::createObject(ApiLogFullDto::class);
         $requestLogDto->activityId = $activityId;
         $requestLogDto->requestTime = time();
@@ -109,21 +105,18 @@ Then replace previous logger events trigger code with:
         $requestLogDto->requestGroup = Auth::REQUEST_GROUP;
         $requestLogDto->requestId = Auth::REQUEST_ID_SEND_SMS;
 
-        // got \yii\httpclient\Response
         $response = $request->send();
 
+        // fill up response fields
         $requestLogDto->responseTime = time();
         $requestLogDto->statusCode = $response->statusCode;
         $requestLogDto->responseContent = $response->getContent();
 
-        // trigger event to delay dto to memory
-        \Yii::$app->trigger(
-            LoggerComponent::EVENT_DELAY_API_REQUEST_LOG,
-            \Yii::createObject([
-                'class' => Event::class,
-                'sender' => $requestLogDto,
-            ])
-        );
+        // delay event
+
+        /** @var DelayedLoggerComponent $loggerComponent */
+        $loggerComponent = \Yii::$app->get('logger');
+        $loggerComponent->delayLogDto($requestLogDto);
 
 Next fire configured "fireStorageEvent" event outside of transaction block. 
 I suggest to use EVENT_AFTER_ACTION event. 
