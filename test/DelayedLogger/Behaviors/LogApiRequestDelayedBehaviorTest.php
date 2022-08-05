@@ -1,22 +1,20 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\Tests\Logger\Behaviors;
+namespace Brezgalov\ExtApiLogger\Tests\DelayedLogger\Behaviors;
 
-use Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestBehavior;
-use Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestDelayedBehavior;
-use Brezgalov\ExtApiLogger\Logger\LoggerComponent;
+use Brezgalov\ExtApiLogger\DelayedLogger\Behaviors\LogApiRequestDelayedBehavior;
+use Brezgalov\ExtApiLogger\DelayedLogger\DelayedLoggerComponent;
 use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\Tests\BaseTestCase;
-use yii\base\Event;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\db\Query;
 
 /**
  * Class LogApiRequestDelayedBehaviorTest
- * @package Brezgalov\ExtApiLogger\Tests\Logger\Behaviors
+ * @package Brezgalov\ExtApiLogger\Tests\DelayedLogger
  *
- * @coversDefaultClass \Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestDelayedBehavior
+ * @coversDefaultClass \Brezgalov\ExtApiLogger\DelayedLogger\Behaviors\LogApiRequestDelayedBehavior
  */
 class LogApiRequestDelayedBehaviorTest extends BaseTestCase
 {
@@ -45,10 +43,10 @@ class LogApiRequestDelayedBehaviorTest extends BaseTestCase
                 'logsStorage' => LogsStorageDb::class,
             ]);
         } catch (\Exception $ex2) {
-            $behavior = null;
+            $behavior2 = null;
         }
 
-        $this->assertNull($behavior);
+        $this->assertNull($behavior2);
         $this->assertInstanceOf(InvalidConfigException::class, $ex);
     }
 
@@ -72,76 +70,6 @@ class LogApiRequestDelayedBehaviorTest extends BaseTestCase
     /**
      * @throws InvalidConfigException
      *
-     * @covers ::delayLogDto
-     * @covers ::getLogsDelayed
-     */
-    public function testDelayFunc()
-    {
-        /** @var LogApiRequestDelayedBehavior $behavior */
-        $behavior = \Yii::createObject([
-            'class' => LogApiRequestDelayedBehavior::class,
-            'logsStorage' => LogsStorageDb::class,
-            'fireStorageEvent' => 'test',
-        ]);
-
-        $dto = $this->_getDemoApiLogFull('test', time(), time() + 2);
-
-        $behavior->delayLogDto(\Yii::createObject([
-            'class' => Event::class,
-            'sender' => $dto,
-        ]));
-
-        $data = $behavior->getLogsDelayed();
-
-        $this->assertCount(1, $data);
-
-        $firstItem = array_shift($data);
-
-        $this->assertEquals($dto, $firstItem);
-    }
-
-    /**
-     * @throws InvalidConfigException
-     * @throws \yii\db\Exception
-     *
-     * @covers ::delayLogDto
-     * @covers ::fireStorage
-     */
-    public function testStorageFire()
-    {
-        $storage = \Yii::createObject(LogsStorageDb::class);
-
-        \Yii::$app->db->createCommand()->delete($storage->getLogsTableName())->execute();
-
-        /** @var LogApiRequestDelayedBehavior $behavior */
-        $behavior = \Yii::createObject([
-            'class' => LogApiRequestDelayedBehavior::class,
-            'logsStorage' => $storage,
-            'fireStorageEvent' => 'test',
-        ]);
-
-        $dto = $this->_getDemoApiLogFull('test', time(), time() + 2);
-
-        $behavior->delayLogDto(\Yii::createObject([
-            'class' => Event::class,
-            'sender' => $dto,
-        ]));
-
-        $behavior->fireStorage();
-
-        $logsStored = (new Query())
-            ->select('*')
-            ->from($storage->getLogsTableName())
-            ->createCommand($storage->db)
-            ->queryAll();
-
-        $this->assertCount(1, $logsStored);
-        $this->_testLogDataDb($logsStored[0], $dto, $storage);
-    }
-
-    /**
-     * @throws InvalidConfigException
-     *
      * @covers ::events
      */
     public function testEventsList()
@@ -155,10 +83,52 @@ class LogApiRequestDelayedBehaviorTest extends BaseTestCase
 
         $events = $behavior->events();
 
+        $this->assertCount(1, $events);
         $this->assertArrayHasKey('test', $events);
         $this->assertTrue(method_exists($behavior, $events['test']));
+    }
 
-        $this->assertArrayHasKey(LoggerComponent::EVENT_DELAY_API_REQUEST_LOG, $events);
-        $this->assertTrue(method_exists($behavior, $events[LoggerComponent::EVENT_DELAY_API_REQUEST_LOG]));
+    /**
+     * @throws InvalidConfigException
+     * @throws \yii\db\Exception
+     *
+     * @covers ::fireStorage
+     */
+    public function testFireStorage()
+    {
+        /** @var DelayedLoggerComponent $component */
+        $component = \Yii::createObject([
+            'class' => DelayedLoggerComponent::class,
+            'logsStorage' => LogsStorageDb::class,
+        ]);
+
+        /** @var LogsStorageDb $storage */
+        $storage = \Yii::createObject($component->logsStorage);
+        $storage->db->createCommand()->delete(
+            $storage->getLogsTableName()
+        )->execute();
+
+        $dto = $this->_getDemoApiLogFull('test', time(), time() + 2);
+
+        $component->delayLogDto($dto);
+
+        /** @var LogApiRequestDelayedBehavior $behavior */
+        $behavior = \Yii::createObject([
+            'class' => LogApiRequestDelayedBehavior::class,
+            'logsStorage' => $storage,
+            'parentComponent' => $component,
+            'fireStorageEvent' => 'test',
+        ]);
+
+        $behavior->fireStorage();
+
+        $logsStored = (new Query())
+            ->select('*')
+            ->from($storage->getLogsTableName())
+            ->createCommand($storage->db)
+            ->queryAll();
+
+        $this->assertCount(1, $logsStored);
+        $this->_testLogDataDb($logsStored[0], $dto, $storage);
     }
 }
