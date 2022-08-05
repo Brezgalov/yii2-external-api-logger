@@ -137,4 +137,32 @@ class DbLogsStorageTest extends BaseTestCase
 
         $this->_testResponseLogDataDb($firstLog, $responseReceived, $storage);
     }
+
+    /**
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\db\Exception
+     */
+    public function testStoreFullLog()
+    {
+        $storage = \Yii::createObject(LogsStorageDb::class);
+        $storage->db->createCommand()->delete($storage->getLogsTableName())->execute();
+
+        $fullDto = $this->_getDemoApiLogFull('test-full-store', time(), time() + 2);
+
+        $result = $storage->storeLog($fullDto);
+
+        $this->assertTrue($result);
+
+        $logsStored = (new Query())
+            ->select('*')
+            ->from($storage->getLogsTableName())
+            ->createCommand($storage->db)
+            ->queryAll();
+
+        $this->assertCount(1, $logsStored);
+
+        $firstLog = $logsStored[0];
+
+        $this->_testLogDataDb($firstLog, $fullDto, $storage);
+    }
 }

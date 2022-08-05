@@ -12,7 +12,10 @@ class LoggerComponent extends Component implements BootstrapInterface
     const EVENT_EXTERNAL_API_REQUEST_SENT = 'externalApiRequestSent';
     const EVENT_EXTERNAL_API_RESPONSE_RECEIVED = 'externalApiResponseReceived';
 
+    const EVENT_DELAY_API_REQUEST_LOG = 'delayApiRequestLog';
+
     const LOGGER_BEHAVIOR_NAME = 'externalApiLoggerBehavior';
+    const DELAYED_LOGGER_BEHAVIOR_NAME = 'externalApiDelayedLoggerBehavior';
 
     /**
      * @var ILogsStorage|array|string
@@ -20,11 +23,24 @@ class LoggerComponent extends Component implements BootstrapInterface
     public $logsStorage;
 
     /**
+     * @var string|array
+     */
+    public $delayedLoggerBehavior;
+
+    /**
      * @return string
      */
     public function getLoggerBehaviorName()
     {
         return self::LOGGER_BEHAVIOR_NAME;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDelayedLoggerBehaviorName()
+    {
+        return self::DELAYED_LOGGER_BEHAVIOR_NAME;
     }
 
     /**
@@ -39,7 +55,23 @@ class LoggerComponent extends Component implements BootstrapInterface
     }
 
     /**
+     * @return array|mixed
+     */
+    public function getDelayedLoggerBehaviorSetup()
+    {
+        $delayedLogger = $this->delayedLoggerBehavior;
+
+        if (is_array($delayedLogger)) {
+            $delayedLogger['logsStorage'] = $this->logsStorage;
+            return $delayedLogger;
+        }
+
+        return $delayedLogger;
+    }
+
+    /**
      * @param \yii\base\Application $app
+     * @throws \yii\base\InvalidConfigException
      */
     public function bootstrap($app)
     {
@@ -47,5 +79,13 @@ class LoggerComponent extends Component implements BootstrapInterface
             $this->getLoggerBehaviorName(),
             \Yii::createObject($this->getLoggerBehaviorSetup())
         );
+
+        $delayedBehaviorSetup = $this->getDelayedLoggerBehaviorSetup();
+        if ($delayedBehaviorSetup) {
+            $app->attachBehavior(
+                $this->getDelayedLoggerBehaviorName(),
+                \Yii::createObject($delayedBehaviorSetup)
+            );
+        }
     }
 }

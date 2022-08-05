@@ -2,6 +2,7 @@
 
 namespace Brezgalov\ExtApiLogger\LogsStorageDb;
 
+use Brezgalov\ExtApiLogger\LogsStorage\ApiLogFullDto;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
@@ -139,5 +140,29 @@ class LogsStorageDb extends Component implements ILogsStorage
         'activity_id = :activity_id',
             [':activity_id' => $responseDto->activityId]
         )->execute();
+    }
+
+    /**
+     * @param ApiLogFullDto $apiLogDto
+     * @return bool
+     * @throws \yii\db\Exception
+     */
+    public function storeLog(ApiLogFullDto $apiLogDto)
+    {
+        return (bool)$this->db->createCommand()->insert($this->getLogsTableName(), [
+            'activity_id' => $apiLogDto->activityId,
+            'request_group' => $apiLogDto->requestGroup,
+            'request_id' => $apiLogDto->requestId,
+            'method' => $apiLogDto->method,
+            'url' => $apiLogDto->url,
+            'request_params' => $this->prepareRequestParams($apiLogDto->input),
+            'request_time' => $this->prepareUnixTime($apiLogDto->requestTime),
+            'called_from_controller' => $apiLogDto->controllerName,
+            'called_from_action' => $apiLogDto->actionName,
+            'called_by_user' => $apiLogDto->userId,
+            'response_status_code' => $apiLogDto->statusCode,
+            'response_content' => $this->prepareResponseContent($apiLogDto->responseContent),
+            'response_time' => $this->prepareUnixTime($apiLogDto->responseTime),
+        ])->execute();
     }
 }

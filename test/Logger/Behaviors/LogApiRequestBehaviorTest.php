@@ -22,7 +22,6 @@ class LogApiRequestBehaviorTest extends BaseTestCase
      * @throws \yii\base\InvalidConfigException
      *
      * @covers ::__construct
-     * @covers ::events
      */
     public function testConstructorFailure()
     {
@@ -37,6 +36,22 @@ class LogApiRequestBehaviorTest extends BaseTestCase
 
         $this->assertNull($behavior);
         $this->assertInstanceOf(InvalidConfigException::class, $ex);
+    }
+
+    /**
+     * @throws \yii\base\InvalidConfigException
+     *
+     * @covers ::__construct
+     */
+    public function testConstructor()
+    {
+        /** @var LogApiRequestBehavior $behavior */
+        $behavior = \Yii::createObject([
+            'class' => LogApiRequestBehavior::class,
+            'logsStorage' => LogsStorageDb::class,
+        ]);
+
+        $this->assertInstanceOf(LogsStorageDb::class, $behavior->logsStorage);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Brezgalov\ExtApiLogger\Tests;
 
 use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiRequestSent;
 use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiResponseReceived;
+use Brezgalov\ExtApiLogger\LogsStorage\ApiLogFullDto;
 use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
@@ -82,6 +83,38 @@ class BaseTestCase extends TestCase
     }
 
     /**
+     * @param $activityId
+     * @param $requestTime
+     * @param $responseTime
+     * @return ApiLogFullDto|object
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected function _getDemoApiLogFull($activityId, $requestTime, $responseTime)
+    {
+        $dtoFull = \Yii::createObject(ApiLogFullDto::class);
+
+        $dtoFull->activityId = $activityId;
+
+        $dtoFull->method = 'POST';
+        $dtoFull->url = 'http://127.0.0.1/example-api-route/';
+        $dtoFull->input = [
+            'test_storage' => 1,
+        ];
+        $dtoFull->requestGroup = 'RequestsToTest';
+        $dtoFull->requestId = 'MyStoreTestRequest';
+        $dtoFull->controllerName = 'site';
+        $dtoFull->actionName = 'index';
+        $dtoFull->userId = 12;
+        $dtoFull->requestTime = $requestTime;
+
+        $dtoFull->statusCode = 404;
+        $dtoFull->responseContent = 'Not Found';
+        $dtoFull->responseTime = $responseTime;
+
+        return $dtoFull;
+    }
+
+    /**
      * @param string $activityId
      * @param int $responseTime
      * @throws \yii\base\InvalidConfigException
@@ -128,5 +161,27 @@ class BaseTestCase extends TestCase
         $this->assertEquals($requestDto->statusCode, $logData['response_status_code']);
         $this->assertEquals($storage->prepareResponseContent($requestDto->responseContent), $logData['response_content']);
         $this->assertEquals($storage->prepareUnixTime($requestDto->responseTime), $logData['response_time']);
+    }
+
+    /**
+     * @param array $logData
+     * @param ApiLogFullDto $apiLogFullDto
+     * @param LogsStorageDb $storage
+     */
+    protected function _testLogDataDb(array $logData, ApiLogFullDto $apiLogFullDto, LogsStorageDb $storage)
+    {
+        $this->assertEquals($apiLogFullDto->activityId, $logData['activity_id']);
+        $this->assertEquals($apiLogFullDto->method, $logData['method']);
+        $this->assertEquals($storage->prepareMethod($apiLogFullDto->url), $logData['url']);
+        $this->assertEquals($storage->prepareRequestParams($apiLogFullDto->input), $logData['request_params']);
+        $this->assertEquals($apiLogFullDto->requestGroup, $logData['request_group']);
+        $this->assertEquals($apiLogFullDto->requestId, $logData['request_id']);
+        $this->assertEquals($apiLogFullDto->controllerName, $logData['called_from_controller']);
+        $this->assertEquals($apiLogFullDto->actionName, $logData['called_from_action']);
+        $this->assertEquals($apiLogFullDto->userId, $logData['called_by_user']);
+        $this->assertEquals($storage->prepareUnixTime($apiLogFullDto->requestTime), $logData['request_time']);
+        $this->assertEquals($apiLogFullDto->statusCode, $logData['response_status_code']);
+        $this->assertEquals($storage->prepareResponseContent($apiLogFullDto->responseContent), $logData['response_content']);
+        $this->assertEquals($storage->prepareUnixTime($apiLogFullDto->responseTime), $logData['response_time']);
     }
 }

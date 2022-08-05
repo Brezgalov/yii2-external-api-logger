@@ -3,10 +3,12 @@
 namespace Brezgalov\ExtApiLogger\Tests\Logger;
 
 use Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestBehavior;
+use Brezgalov\ExtApiLogger\Logger\Behaviors\LogApiRequestDelayedBehavior;
 use Brezgalov\ExtApiLogger\Logger\LoggerComponent;
 use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use Brezgalov\ExtApiLogger\Tests\BaseTestCase;
+use yii\base\Event;
 use yii\db\Query;
 
 /**
@@ -98,5 +100,56 @@ class LoggerComponentTest extends BaseTestCase
         $firstLog = $logsStored[0];
 
         $this->_testResponseLogDataDb($firstLog, $responseReceivedEvent->convertToResponseDto(), $storage);
+    }
+
+    /**
+     * @throws \yii\base\InvalidConfigException
+     *
+     * @covers ::getDelayedLoggerBehaviorName
+     * @covers ::getDelayedLoggerBehaviorSetup
+     * @covers ::bootstrap
+     */
+    public function testDelayedLoggerBehaviorBootstrap()
+    {
+        $testEvent = 'MyTestEvent';
+
+        /** @var LoggerComponent $component */
+        $component = \Yii::createObject([
+            'class' => LoggerComponent::class,
+            'logsStorage' => LogsStorageDb::class,
+            'delayedLoggerBehavior' => [
+                'class' => LogApiRequestDelayedBehavior::class,
+                'fireStorageEvent' => $testEvent,
+            ],
+        ]);
+
+        /** @var LogsStorageDb $storage */
+        $storage = \Yii::createObject($component->logsStorage);
+        $storage->db->createCommand()->delete(
+            $storage->getLogsTableName()
+        )->execute();
+
+        $component->bootstrap(\Yii::$app);
+
+        $dto = $this->_getDemoApiLogFull('test', time(), time() + 2);
+
+        \Yii::$app->trigger(
+            LoggerComponent::EVENT_DELAY_API_REQUEST_LOG,
+            \Yii::createObject([
+                'class' => Event::class,
+                'sender' => $dto,
+            ])
+        );
+
+        \Yii::$app->trigger($testEvent);
+
+        $logsStored = (new Query())
+            ->select('*')
+            ->from($storage->getLogsTableName())
+            ->createCommand($storage->db)
+            ->queryAll();
+
+        $this->assertCount(1, $logsStored);
+        $this->_testLogDataDb($logsStored[0], $dto, $storage);
     }
 }

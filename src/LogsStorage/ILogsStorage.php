@@ -15,4 +15,10 @@ interface ILogsStorage
      * @return bool
      */
     public function storeResponseReceived(LogApiResponseDto $responseDto);
+
+    /**
+     * @param ApiLogFullDto $apiLogDto
+     * @return bool
+     */
+    public function storeLog(ApiLogFullDto $apiLogDto);
 }
