@@ -21,7 +21,7 @@ class m220825_000000_external_api_logger_create_extnl_api_logs_table extends Mig
             'request_group' => $this->string(),
             'request_id' => $this->string(),
             'method' => $this->string()->notNull()->defaultValue('GET'),
-            'url' => $this->string()->notNull(),
+            'url' => $this->string(512)->notNull(), // urls with tokens inside query appear to be ~400 chars
             'request_params' => $this->text(),
             'request_time' => $this->dateTime()->notNull(),
             'response_status_code' => $this->integer(),
