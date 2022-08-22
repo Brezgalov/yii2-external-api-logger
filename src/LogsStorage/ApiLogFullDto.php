@@ -70,4 +70,25 @@ class ApiLogFullDto extends Component
      * @var int
      */
     public $responseTime;
+
+    /**
+     * ApiLogFullDto constructor.
+     * @param array $config
+     */
+    public function __construct($config = [])
+    {
+        parent::__construct($config);
+
+        if (empty($this->controllerName)) {
+            $controller = \Yii::$app->controller;
+
+            if ($controller) {
+                $this->controllerName = $controller->id;
+            }
+
+            if (empty($this->actionName) && $controller->action) {
+                $this->actionName = $controller->action->id;
+            }
+        }
+    }
 }
