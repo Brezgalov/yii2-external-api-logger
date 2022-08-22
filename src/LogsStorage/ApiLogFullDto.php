@@ -83,12 +83,16 @@ class ApiLogFullDto extends Component
             $controller = \Yii::$app->controller;
 
             if ($controller) {
-                $this->controllerName = $controller->id;
+                $this->controllerName = get_class($controller);
             }
 
             if (empty($this->actionName) && $controller->action) {
                 $this->actionName = $controller->action->id;
             }
+        }
+
+        if (empty($this->userId) && \Yii::$app->has('user')) {
+            $this->userId = \Yii::$app->user->getId();
         }
     }
 }
