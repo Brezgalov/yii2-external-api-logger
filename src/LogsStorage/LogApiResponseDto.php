@@ -43,9 +43,9 @@ class LogApiResponseDto extends Component implements ILogApiResponseDto
     }
 
     /**
-     * @return array
+     * @return array|string
      */
-    public function getResponseContent(): array
+    public function getResponseContent()
     {
         return $this->responseContent;
     }

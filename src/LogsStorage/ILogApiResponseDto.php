@@ -15,9 +15,9 @@ interface ILogApiResponseDto
     public function getStatusCode(): string;
 
     /**
-     * @return array
+     * @return array|string
      */
-    public function getResponseContent(): array;
+    public function getResponseContent();
 
     /**
      * @return int

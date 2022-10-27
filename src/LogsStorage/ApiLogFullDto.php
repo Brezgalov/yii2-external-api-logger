@@ -185,9 +185,9 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     }
 
     /**
-     * @return array
+     * @return array|string
      */
-    public function getResponseContent(): array
+    public function getResponseContent()
     {
         return $this->responseContent;
     }
