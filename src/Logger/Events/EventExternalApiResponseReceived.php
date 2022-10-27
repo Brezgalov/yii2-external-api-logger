@@ -2,7 +2,7 @@
 
 namespace Brezgalov\ExtApiLogger\Logger\Events;
 
-use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
+use Brezgalov\ExtApiLogger\LogsStorage\ILogApiResponseDto;
 use yii\base\Event;
 
 class EventExternalApiResponseReceived extends Event
@@ -50,12 +50,12 @@ class EventExternalApiResponseReceived extends Event
     }
 
     /**
-     * @return LogApiResponseDto|object
+     * @return ILogApiResponseDto|object
      * @throws \yii\base\InvalidConfigException
      */
     public function convertToResponseDto()
     {
-        $dto = \Yii::createObject(LogApiResponseDto::class);
+        $dto = \Yii::createObject(ILogApiResponseDto::class);
 
         $dto->activityId = $this->activityId;
         $dto->statusCode = $this->statusCode;

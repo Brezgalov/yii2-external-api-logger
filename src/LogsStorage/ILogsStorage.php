@@ -5,20 +5,20 @@ namespace Brezgalov\ExtApiLogger\LogsStorage;
 interface ILogsStorage
 {
     /**
-     * @param LogApiRequestDto $requestDto
+     * @param ILogApiRequestDto $requestDto
      * @return bool
      */
-    public function storeRequestSent(LogApiRequestDto $requestDto);
+    public function storeRequestSent(ILogApiRequestDto $requestDto): bool;
 
     /**
-     * @param LogApiResponseDto $responseDto
+     * @param ILogApiResponseDto $responseDto
      * @return bool
      */
-    public function storeResponseReceived(LogApiResponseDto $responseDto);
+    public function storeResponseReceived(ILogApiResponseDto $responseDto): bool;
 
     /**
-     * @param ApiLogFullDto $apiLogDto
+     * @param IApiLogFullDto $apiLogDto
      * @return bool
      */
-    public function storeLog(ApiLogFullDto $apiLogDto);
+    public function storeLog(IApiLogFullDto $apiLogDto): bool;
 }

@@ -3,7 +3,7 @@
 namespace Brezgalov\ExtApiLogger\Tests\Logger\Events;
 
 use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiResponseReceived;
-use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
+use Brezgalov\ExtApiLogger\LogsStorage\ILogApiResponseDto;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,7 +54,7 @@ class EventExternalApiResponseReceivedTest extends TestCase
 
         $dto = $event->convertToResponseDto();
 
-        $this->assertInstanceOf(LogApiResponseDto::class, $dto);
+        $this->assertInstanceOf(ILogApiResponseDto::class, $dto);
 
         $this->assertEquals($actId, $dto->activityId);
         $this->assertEquals($responseCode, $dto->statusCode);

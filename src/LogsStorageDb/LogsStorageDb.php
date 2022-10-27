@@ -3,9 +3,11 @@
 namespace Brezgalov\ExtApiLogger\LogsStorageDb;
 
 use Brezgalov\ExtApiLogger\LogsStorage\ApiLogFullDto;
+use Brezgalov\ExtApiLogger\LogsStorage\IApiLogFullDto;
+use Brezgalov\ExtApiLogger\LogsStorage\ILogApiRequestDto;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
-use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
+use Brezgalov\ExtApiLogger\LogsStorage\ILogApiResponseDto;
 use yii\base\Component;
 use yii\db\Connection;
 
@@ -104,65 +106,65 @@ class LogsStorageDb extends Component implements ILogsStorage
     }
 
     /**
-     * @param LogApiRequestDto $requestDto
+     * @param ILogApiRequestDto $requestDto
      * @return bool
      * @throws \yii\db\Exception
      */
-    public function storeRequestSent(LogApiRequestDto $requestDto)
+    public function storeRequestSent(ILogApiRequestDto $requestDto): bool
     {
         return (bool)$this->db->createCommand()->insert($this->getLogsTableName(), [
-            'activity_id' => $requestDto->activityId,
-            'request_group' => $requestDto->requestGroup,
-            'request_id' => $requestDto->requestId,
-            'method' => $requestDto->method,
-            'url' => $requestDto->url,
-            'request_params' => $this->prepareRequestParams($requestDto->input),
-            'request_time' => $this->prepareUnixTime($requestDto->requestTime),
-            'called_from_controller' => $requestDto->controllerName,
-            'called_from_action' => $requestDto->actionName,
-            'called_by_user' => $requestDto->userId,
+            'activity_id' => $requestDto->getActivityId(),
+            'request_group' => $requestDto->getRequestGroup(),
+            'request_id' => $requestDto->getRequestId(),
+            'method' => $requestDto->getMethod(),
+            'url' => $requestDto->getUrl(),
+            'request_params' => $this->prepareRequestParams($requestDto->getInput()),
+            'request_time' => $this->prepareUnixTime($requestDto->getRequestTime()),
+            'called_from_controller' => $requestDto->getControllerName(),
+            'called_from_action' => $requestDto->getActionName(),
+            'called_by_user' => $requestDto->getUserId(),
         ])->execute();
     }
 
     /**
-     * @param LogApiResponseDto $responseDto
+     * @param ILogApiResponseDto $responseDto
      * @return bool
      */
-    public function storeResponseReceived(LogApiResponseDto $responseDto)
+    public function storeResponseReceived(ILogApiResponseDto $responseDto): bool
     {
         return (bool)$this->db->createCommand()->update(
             $this->getLogsTableName(),
             [
-                'response_status_code' => $responseDto->statusCode,
-                'response_content' => $this->prepareResponseContent($responseDto->responseContent),
-                'response_time' => $this->prepareUnixTime($responseDto->responseTime),
+                'response_status_code' => $responseDto->getStatusCode(),
+                'response_content' => $this->prepareResponseContent($responseDto->getResponseContent()),
+                'response_time' => $this->prepareUnixTime($responseDto->getResponseTime()),
             ],
         'activity_id = :activity_id',
-            [':activity_id' => $responseDto->activityId]
+            [':activity_id' => $responseDto->getActivityId()]
         )->execute();
     }
 
     /**
-     * @param ApiLogFullDto $apiLogDto
+     * @param IApiLogFullDto $apiLogDto
      * @return bool
      * @throws \yii\db\Exception
      */
-    public function storeLog(ApiLogFullDto $apiLogDto)
+    public function storeLog(IApiLogFullDto $apiLogDto): bool
     {
         return (bool)$this->db->createCommand()->insert($this->getLogsTableName(), [
-            'activity_id' => $apiLogDto->activityId,
-            'request_group' => $apiLogDto->requestGroup,
-            'request_id' => $apiLogDto->requestId,
-            'method' => $apiLogDto->method,
-            'url' => $apiLogDto->url,
-            'request_params' => $this->prepareRequestParams($apiLogDto->input),
-            'request_time' => $this->prepareUnixTime($apiLogDto->requestTime),
-            'called_from_controller' => $apiLogDto->controllerName,
-            'called_from_action' => $apiLogDto->actionName,
-            'called_by_user' => $apiLogDto->userId,
-            'response_status_code' => $apiLogDto->statusCode,
-            'response_content' => $this->prepareResponseContent($apiLogDto->responseContent),
-            'response_time' => $this->prepareUnixTime($apiLogDto->responseTime),
+            'activity_id' => $apiLogDto->getActivityId(),
+            'request_group' => $apiLogDto->getRequestGroup(),
+            'request_id' => $apiLogDto->getRequestId(),
+            'method' => $apiLogDto->getMethod(),
+            'url' => $apiLogDto->getUrl(),
+            'request_params' => $this->prepareRequestParams($apiLogDto->getInput()),
+            'request_time' => $this->prepareUnixTime($apiLogDto->getRequestTime()),
+            'called_from_controller' => $apiLogDto->getControllerName(),
+            'called_from_action' => $apiLogDto->getActionName(),
+            'called_by_user' => $apiLogDto->getUserId(),
+            'response_status_code' => $apiLogDto->getStatusCode(),
+            'response_content' => $this->prepareResponseContent($apiLogDto->getResponseContent()),
+            'response_time' => $this->prepareUnixTime($apiLogDto->getResponseTime()),
         ])->execute();
     }
 }

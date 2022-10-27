@@ -7,7 +7,7 @@ use Brezgalov\ExtApiLogger\Logger\Events\EventExternalApiResponseReceived;
 use Brezgalov\ExtApiLogger\LogsStorage\ApiLogFullDto;
 use Brezgalov\ExtApiLogger\LogsStorageDb\LogsStorageDb;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
-use Brezgalov\ExtApiLogger\LogsStorage\LogApiResponseDto;
+use Brezgalov\ExtApiLogger\LogsStorage\ILogApiResponseDto;
 use PHPUnit\Framework\TestCase;
 
 class BaseTestCase extends TestCase
@@ -68,12 +68,12 @@ class BaseTestCase extends TestCase
     /**
      * @param string $activityId
      * @param int $responseTime
-     * @return LogApiResponseDto|object
+     * @return ILogApiResponseDto|object
      * @throws \yii\base\InvalidConfigException
      */
     protected function _getDemoLogApiResponseDto($activityId, $responseTime)
     {
-        $responseReceived = \Yii::createObject(LogApiResponseDto::class);
+        $responseReceived = \Yii::createObject(ILogApiResponseDto::class);
         $responseReceived->activityId = $activityId;
         $responseReceived->statusCode = 404;
         $responseReceived->responseContent = 'Not Found';
@@ -153,10 +153,10 @@ class BaseTestCase extends TestCase
 
     /**
      * @param array $logData
-     * @param LogApiResponseDto $requestDto
+     * @param ILogApiResponseDto $requestDto
      * @param LogsStorageDb $storage
      */
-    protected function _testResponseLogDataDb(array $logData, LogApiResponseDto $requestDto, LogsStorageDb $storage)
+    protected function _testResponseLogDataDb(array $logData, ILogApiResponseDto $requestDto, LogsStorageDb $storage)
     {
         $this->assertEquals($requestDto->statusCode, $logData['response_status_code']);
         $this->assertEquals($storage->prepareResponseContent($requestDto->responseContent), $logData['response_content']);
