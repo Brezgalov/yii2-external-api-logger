@@ -50,9 +50,9 @@ interface IApiLogFullDto
     public function getActionName(): string;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int;
+    public function getUserId(): ?int;
 
     /**
      * @return string

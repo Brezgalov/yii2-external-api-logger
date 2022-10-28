@@ -169,9 +169,9 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }

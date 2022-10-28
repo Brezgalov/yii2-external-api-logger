@@ -131,7 +131,7 @@ class LogApiRequestDto extends Component implements ILogApiRequestDto
     /**
      * @return int
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
