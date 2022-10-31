@@ -29,7 +29,7 @@ class LogApiResponseDto extends Component implements ILogApiResponseDto
     /**
      * @return string|null
      */
-    public function getActivityId(): ?string
+    public function getActivityId()
     {
         return $this->activityId;
     }
@@ -37,7 +37,7 @@ class LogApiResponseDto extends Component implements ILogApiResponseDto
     /**
      * @return string
      */
-    public function getStatusCode(): string
+    public function getStatusCode()
     {
         return $this->statusCode;
     }
@@ -53,7 +53,7 @@ class LogApiResponseDto extends Component implements ILogApiResponseDto
     /**
      * @return int
      */
-    public function getResponseTime(): int
+    public function getResponseTime()
     {
         return $this->responseTime;
     }

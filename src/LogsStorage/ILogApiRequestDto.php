@@ -7,50 +7,50 @@ interface ILogApiRequestDto
     /**
      * @return string
      */
-    public function getMethod(): string;
+    public function getMethod();
 
     /**
      * @return string
      */
-    public function getUrl(): string;
+    public function getUrl();
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getInput(): array;
+    public function getInput();
 
     /**
      * @return int
      */
-    public function getRequestTime(): int;
+    public function getRequestTime();
 
     /**
      * @return string|null
      */
-    public function getActivityId(): ?string;
+    public function getActivityId();
 
     /**
      * @return string|null
      */
-    public function getRequestGroup(): ?string;
+    public function getRequestGroup();
 
     /**
      * @return string|null
      */
-    public function getRequestId(): ?string;
+    public function getRequestId();
 
     /**
      * @return string
      */
-    public function getControllerName(): string;
+    public function getControllerName();
 
     /**
      * @return string
      */
-    public function getActionName(): string;
+    public function getActionName();
 
     /**
      * @return int|null
      */
-    public function getUserId(): ?int;
+    public function getUserId();
 }

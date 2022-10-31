@@ -99,7 +99,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string
      */
-    public function getMethod(): string
+    public function getMethod()
     {
         return $this->method;
     }
@@ -107,15 +107,15 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl()
     {
         return $this->url;
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getInput(): array
+    public function getInput()
     {
         return $this->input;
     }
@@ -123,7 +123,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return int
      */
-    public function getRequestTime(): int
+    public function getRequestTime()
     {
         return $this->requestTime;
     }
@@ -131,7 +131,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string|null
      */
-    public function getActivityId(): ?string
+    public function getActivityId()
     {
         return $this->activityId;
     }
@@ -139,7 +139,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string|null
      */
-    public function getRequestGroup(): ?string
+    public function getRequestGroup()
     {
         return $this->requestGroup;
     }
@@ -147,7 +147,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string|null
      */
-    public function getRequestId(): ?string
+    public function getRequestId()
     {
         return $this->requestId;
     }
@@ -155,7 +155,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string
      */
-    public function getControllerName(): string
+    public function getControllerName()
     {
         return $this->controllerName;
     }
@@ -163,7 +163,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string
      */
-    public function getActionName(): string
+    public function getActionName()
     {
         return $this->actionName;
     }
@@ -171,7 +171,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return int|null
      */
-    public function getUserId(): ?int
+    public function getUserId()
     {
         return $this->userId;
     }
@@ -179,7 +179,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return string
      */
-    public function getStatusCode(): string
+    public function getStatusCode()
     {
         return $this->statusCode;
     }
@@ -195,7 +195,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @return int
      */
-    public function getResponseTime(): int
+    public function getResponseTime()
     {
         return $this->responseTime;
     }

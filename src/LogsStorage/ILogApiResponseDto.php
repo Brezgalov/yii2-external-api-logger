@@ -7,12 +7,12 @@ interface ILogApiResponseDto
     /**
      * @return string|null
      */
-    public function getActivityId(): ?string;
+    public function getActivityId();
 
     /**
      * @return string
      */
-    public function getStatusCode(): string;
+    public function getStatusCode();
 
     /**
      * @return array|string
@@ -22,5 +22,5 @@ interface ILogApiResponseDto
     /**
      * @return int
      */
-    public function getResponseTime(): int;
+    public function getResponseTime();
 }
