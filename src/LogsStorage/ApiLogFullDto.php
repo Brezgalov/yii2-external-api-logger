@@ -19,7 +19,7 @@ class ApiLogFullDto extends Component implements IApiLogFullDto
     /**
      * @var array
      */
-    public $input;
+    public $input = [];
 
     /**
      * @var string
