@@ -7,6 +7,9 @@ use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 
+/**
+ * @deprecated
+ */
 class LogApiRequestDelayedBehavior extends Behavior
 {
     const METHOD_FIRE_STORAGE = 'fireStorage';

@@ -9,6 +9,9 @@ use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 
+/**
+ * @deprecated
+ */
 class LogApiRequestBehavior extends Behavior
 {
     const METHOD_LOG_REQUEST_SENT = 'logRequestSent';

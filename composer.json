@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=7.2.0",
+    "php": ">=8.0.0",
     "yiisoft/yii2": ">=2.0.6",
     "ext-json": "*"
   },
@@ -19,7 +19,9 @@
   },
   "scripts": {
     "test": "./vendor/bin/phpunit test",
-    "test-coverage": "./vendor/bin/phpunit test --coverage-html coverage"
+    "test-coverage": "./vendor/bin/phpunit test --coverage-html coverage",
+    "test-v2": "./vendor/bin/phpunit ./v2/test/ -c ./v2/phpunit.xml",
+    "test-v2-coverage": "./vendor/bin/phpunit ./v2/test/ -c ./v2/phpunit.xml --coverage-html ./v2/coverage"
   },
   "repositories": [
     {
@@ -30,7 +32,9 @@
   "autoload": {
     "psr-4": {
       "Brezgalov\\ExtApiLogger\\": "src/",
-      "Brezgalov\\ExtApiLogger\\Tests\\": "test/"
+      "Brezgalov\\ExtApiLogger\\Tests\\": "test/",
+      "Brezgalov\\ExtApiLogger\\v2\\": "v2/src/",
+      "Brezgalov\\ExtApiLogger\\v2\\Tests\\": "v2/test/"
     }
   },
   "config": {

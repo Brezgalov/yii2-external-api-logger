@@ -2,11 +2,9 @@
 
 namespace Brezgalov\ExtApiLogger\LogsStorageDb;
 
-use Brezgalov\ExtApiLogger\LogsStorage\ApiLogFullDto;
 use Brezgalov\ExtApiLogger\LogsStorage\IApiLogFullDto;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogApiRequestDto;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
-use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
 use Brezgalov\ExtApiLogger\LogsStorage\ILogApiResponseDto;
 use yii\base\Component;
 use yii\db\Connection;

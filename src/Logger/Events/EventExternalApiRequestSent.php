@@ -5,6 +5,9 @@ namespace Brezgalov\ExtApiLogger\Logger\Events;
 use Brezgalov\ExtApiLogger\LogsStorage\LogApiRequestDto;
 use yii\base\Event;
 
+/**
+ * @deprecated
+ */
 class EventExternalApiRequestSent extends Event
 {
     /**

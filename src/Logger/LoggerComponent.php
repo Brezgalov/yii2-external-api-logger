@@ -7,6 +7,9 @@ use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use yii\base\BootstrapInterface;
 use yii\base\Component;
 
+/**
+ * @deprecated
+ */
 class LoggerComponent extends Component implements BootstrapInterface
 {
     const EVENT_EXTERNAL_API_REQUEST_SENT = 'externalApiRequestSent';

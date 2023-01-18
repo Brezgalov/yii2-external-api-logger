@@ -3,3 +3,5 @@
 vendor
 coverage
 test/db.local.php
+v2/.phpunit.cache
+v2/coverage

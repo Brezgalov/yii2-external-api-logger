@@ -11,6 +11,9 @@ use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 
+/**
+ * @deprecated
+ */
 class DelayedLoggerComponent extends Component implements BootstrapInterface
 {
     const DELAYED_LOGGER_BEHAVIOR_NAME = 'externalApiDelayedLoggerBehavior';

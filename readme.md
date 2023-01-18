@@ -6,7 +6,37 @@ This component helps you log external api interaction
 
 > composer require brezgalov/yii2-external-api-logger
 
-## Usage
+## Usage (v2)
+
+### "v2" Description
+
+New version of logger provides Command abstract class (**AbstractSendApiRequestCommand**) designed to
+wrap your api request and log request and response parameters.
+
+**"v2"** forces you to implement your own instance of Command class. This way you gain more control over
+api call and log creation. Also, if you add a custom getter interface for your API-data, you'll be 
+able to use Command class as a DTO via getter interface.
+
+Package comes out with **LogStorageDb** implementing **ILogsStorage**. Consider using this storage 
+class for Yii2 + relational database. 
+
+### Make log and fetch data via API
+
+* Create sub class of **AbstractSendApiRequestCommand**. (MyApiCommand for example)
+* Specify your own way to send api request. Store received data inside of command body
+* Specify getters, so you could fetch this data after execution
+* * Optional: Specify an interface for getters.
+* Use **protected** properties and **getters** to pass request details to
+log DTO factory method.
+* Call **sendApiRequest** method
+* Fetch all you need from your sub class via getters specified by yourself
+* Fetch API request log via **AbstractSendApiRequestCommand::getApiCallLog**
+
+### Store Log DTO
+
+* Use **StoreApiCallLogUseCase::storeLog** to store fetched log
+
+## Usage (deprecated)
 
 Specify logger as an application component at your config file:
 
