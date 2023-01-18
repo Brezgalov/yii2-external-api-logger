@@ -70,12 +70,7 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
         }
 
         $requestLog = $this->makeRequestLog();
-        $requestResponse = $this->tryCallApi();
-
-        $this->callLog = new ApiCallLog(
-            $requestLog,
-            $requestResponse
-        );
+        $this->tryCallApi($requestLog);
 
         return $this;
     }
@@ -131,31 +126,71 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
         return $this->userAuthorizedId;
     }
 
-    protected function tryCallApi(): IApiResponseLog
+    private function tryCallApi(IApiRequestLog $requestLog): void
     {
         try {
-            return $this->processApiRequest();
-        } catch (IApiResponseLog $responseLog) {
-            return $this->handleApiCallResponseThrow($responseLog);
+            $responseLog = $this->processApiRequest();
+
+            $this->storeApiCallLog(
+                $this->makeApiCallLogOnSuccess(
+                    $requestLog,
+                    $responseLog
+                )
+            );
+        } catch (IApiResponseLog $responseLogThrown) {
+            $this->storeApiCallLog(
+                $this->makeApiCallLogOnReponseThrown(
+                    $requestLog,
+                    $responseLogThrown
+                )
+            );
+
+            throw $responseLogThrown;
         } catch (Throwable $ex) {
-            return $this->handleApiCallException($ex);
+            $this->storeApiCallLog(
+                $this->makeApiCallLogOnExceptionThrown(
+                    $requestLog,
+                    $ex
+                )
+            );
+
+            throw $ex;
         }
     }
 
-    protected function handleApiCallResponseThrow(IApiResponseLog $responseLog): IApiResponseLog
-    {
-        return $responseLog;
-    }
+    protected abstract function processApiRequest(): IApiResponseLog;
 
-    protected function handleApiCallException(Throwable $ex): IApiResponseLog
+    protected function makeApiCallLogOnSuccess(IApiRequestLog $requestLog, IApiResponseLog $responseLog): IApiCallLog
     {
-        return new ApiResponseLog(
-            'exception',
-            $ex->getMessage()
+        return new ApiCallLog(
+            $requestLog,
+            $responseLog
         );
     }
 
-    protected abstract function processApiRequest(): IApiResponseLog;
+    protected function makeApiCallLogOnReponseThrown(IApiRequestLog $requestLog, IApiResponseLog $responseLogThrown): IApiCallLog
+    {
+        return new ApiCallLog(
+            $requestLog,
+            $responseLogThrown
+        );
+    }
+
+    protected function makeApiCallLogOnExceptionThrown(IApiRequestLog $requestLog, Throwable $ex): IApiCallLog
+    {
+        return new ApiCallLog(
+            $requestLog,
+            new ApiResponseLog(
+                'exception',
+                $ex->getMessage()
+            )
+        );
+    }
+
+    protected function storeApiCallLog(IApiCallLog $log): void
+    {
+        $this->callLog = $log;
+    }
 
     public function getApiCallLog(): ?IApiCallLog
     {

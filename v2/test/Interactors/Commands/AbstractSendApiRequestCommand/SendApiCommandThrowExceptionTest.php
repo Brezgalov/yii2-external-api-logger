@@ -5,10 +5,12 @@ namespace Brezgalov\ExtApiLogger\v2\Tests\Interactors\Commands\AbstractSendApiRe
 use Brezgalov\ExtApiLogger\v2\Interactors\Commands\AbstractSendApiRequestCommand;
 use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\Interactors\Exceptions\DummyApiResponseLogException;
 use Exception;
+use Throwable;
 
 class SendApiCommandThrowExceptionTest extends BaseSendApiCommandTestCase
 {
     private AbstractSendApiRequestCommand $command;
+    private Throwable $ex;
 
     protected function prepare(): void
     {
@@ -25,11 +27,18 @@ class SendApiCommandThrowExceptionTest extends BaseSendApiCommandTestCase
 
     protected function do(): void
     {
-        $this->command->sendApiRequest();
+        try {
+            $this->command->sendApiRequest();
+        } catch (Throwable $ex) {
+            $this->ex = $ex;
+        }
+
     }
 
     protected function validate(): void
     {
+        $this->assertNotNull($this->ex);
+
         $log = $this->command->getApiCallLog();
 
         $this->validateCallLog($log);
