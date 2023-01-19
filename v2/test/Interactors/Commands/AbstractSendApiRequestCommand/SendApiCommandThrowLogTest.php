@@ -3,9 +3,13 @@
 namespace Brezgalov\ExtApiLogger\v2\Tests\Interactors\Commands\AbstractSendApiRequestCommand;
 
 use Brezgalov\ExtApiLogger\v2\Interactors\Commands\AbstractSendApiRequestCommand;
+use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\IApiCallLogThrowable;
 use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\Interactors\Exceptions\DummyApiResponseLogException;
 use Throwable;
 
+/**
+ * @covers \Brezgalov\ExtApiLogger\v2\Interactors\Commands\AbstractSendApiRequestCommand
+ */
 class SendApiCommandThrowLogTest extends BaseSendApiCommandTestCase
 {
     private AbstractSendApiRequestCommand $command;
@@ -14,6 +18,8 @@ class SendApiCommandThrowLogTest extends BaseSendApiCommandTestCase
     protected function prepare(): void
     {
         parent::prepare();
+
+        $this->requestTime = time();
 
         $this->command = $this->command = $this->makeDummyCommand(function() {
             throw new DummyApiResponseLogException(
@@ -36,10 +42,15 @@ class SendApiCommandThrowLogTest extends BaseSendApiCommandTestCase
 
     protected function validate(): void
     {
-        $this->assertNotNull($this->ex);
+        $ex = $this->ex;
+
+        $this->assertNotNull($ex);
+        $this->assertInstanceOf(IApiCallLogThrowable::class, $ex);
+
+        /** @var IApiCallLogThrowable $ex */
+        $this->validateCallLog($ex);
 
         $log = $this->command->getApiCallLog();
-
-        $this->validateCallLog($log);
+        $this->assertNull($log);
     }
 }

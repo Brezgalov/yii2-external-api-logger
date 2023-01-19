@@ -1,15 +1,15 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\v2\Tests\TestClasses\Interactors\Exceptions;
+namespace Brezgalov\ExtApiLogger\v2\Interactors\Exceptions;
 
-use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\IApiResponseLogThrowable;
+use Exception;
 use Throwable;
 
-class DummyApiResponseLogException extends \Exception implements IApiResponseLogThrowable
+class ApiResponseLogException extends Exception implements IApiResponseLogThrowable
 {
     private string $responseStatusCode;
     private string $responseContent;
-    private ?int $responseTime;
+    private int $responseTime;
 
     public function __construct(
         string $responseStatusCode,
@@ -21,9 +21,10 @@ class DummyApiResponseLogException extends \Exception implements IApiResponseLog
     )
     {
         parent::__construct($message, $code, $previous);
+
         $this->responseStatusCode = $responseStatusCode;
         $this->responseContent = $responseContent;
-        $this->responseTime = $responseTime;
+        $this->responseTime = $responseTime ?: time();
     }
 
     public function getResponseStatusCode(): string

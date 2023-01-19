@@ -2,10 +2,12 @@
 
 namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
 
+use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiCallLogException;
+use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiRequestLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\CommandAlreadyExecutedException;
+use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\IApiResponseLogThrowable;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiCallLog;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiRequestLog;
-use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiCallLog;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiRequestLog;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiResponseLog;
@@ -131,59 +133,57 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
         try {
             $responseLog = $this->processApiRequest();
 
-            $this->storeApiCallLog(
-                $this->makeApiCallLogOnSuccess(
-                    $requestLog,
-                    $responseLog
-                )
+            $this->onSuccess(
+                $requestLog,
+                $responseLog
             );
-        } catch (IApiResponseLog $responseLogThrown) {
-            $this->storeApiCallLog(
-                $this->makeApiCallLogOnReponseThrown(
-                    $requestLog,
-                    $responseLogThrown
-                )
+        } catch (IApiResponseLogThrowable $responseLogThrown) {
+            $this->onResponseThrown(
+                $requestLog,
+                $responseLogThrown
             );
-
-            throw $responseLogThrown;
         } catch (Throwable $ex) {
-            $this->storeApiCallLog(
-                $this->makeApiCallLogOnExceptionThrown(
-                    $requestLog,
-                    $ex
-                )
+            $this->onExceptionThrown(
+                $requestLog,
+                $ex
             );
-
-            throw $ex;
         }
     }
 
     protected abstract function processApiRequest(): IApiResponseLog;
 
-    protected function makeApiCallLogOnSuccess(IApiRequestLog $requestLog, IApiResponseLog $responseLog): IApiCallLog
+    protected function onSuccess(IApiRequestLog $requestLog, IApiResponseLog $responseLog): IApiCallLog
     {
-        return new ApiCallLog(
+        $log = new ApiCallLog(
             $requestLog,
             $responseLog
         );
+
+        $this->storeApiCallLog($log);
+
+        return $log;
     }
 
-    protected function makeApiCallLogOnReponseThrown(IApiRequestLog $requestLog, IApiResponseLog $responseLogThrown): IApiCallLog
+    protected function onResponseThrown(IApiRequestLog $requestLog, IApiResponseLogThrowable $responseLogThrown): IApiCallLog
     {
-        return new ApiCallLog(
-            $requestLog,
+        throw new ApiCallLogException(
+            new ApiCallLog(
+                $requestLog,
+                $responseLogThrown
+            ),
+            $responseLogThrown->getMessage(),
+            $responseLogThrown->getCode(),
             $responseLogThrown
         );
     }
 
-    protected function makeApiCallLogOnExceptionThrown(IApiRequestLog $requestLog, Throwable $ex): IApiCallLog
+    protected function onExceptionThrown(IApiRequestLog $requestLog, Throwable $ex): IApiCallLog
     {
-        return new ApiCallLog(
+        throw new ApiRequestLogException(
             $requestLog,
-            new ApiResponseLog(
-                'exception',
-                $ex->getMessage()
-            )
+            $ex->getMessage(),
+            $ex->getCode(),
+            $ex
         );
     }
 

@@ -3,24 +3,18 @@
 namespace Brezgalov\ExtApiLogger\v2\Tests\Interactors\Models;
 
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog;
-use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\BaseTestCase;
+use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\Interactors\Models\BaseLogTestCase;
 
 /**
- * @coversDefaultClass \Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog
+ * @covers \Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog
  */
-class ApiResponseLogTest extends BaseTestCase
+class ApiResponseLogTest extends BaseLogTestCase
 {
-    private string $responseStatusCode;
-    private string $responseContent;
-    private int $responseTime;
-
     private ApiResponseLog $responseLog;
 
     protected function prepare(): void
     {
-        $this->responseStatusCode = '200';
-        $this->responseContent = 'content';
-        $this->responseTime = time() + 12345;
+        $this->prepareResponseDummyData();
     }
 
     protected function do(): void
@@ -34,8 +28,6 @@ class ApiResponseLogTest extends BaseTestCase
 
     protected function validate(): void
     {
-        $this->assertEquals($this->responseStatusCode, $this->responseLog->getResponseStatusCode());
-        $this->assertEquals($this->responseContent, $this->responseLog->getResponseContent());
-        $this->assertEquals($this->responseTime, $this->responseLog->getResponseTime());
+        $this->validateResponseLog($this->responseLog);
     }
 }

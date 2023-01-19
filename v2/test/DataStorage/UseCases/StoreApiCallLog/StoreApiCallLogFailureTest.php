@@ -7,7 +7,7 @@ use Brezgalov\ExtApiLogger\v2\DataStorage\UseCases\StoreApiCallLogUseCase;
 use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\DataStorage\Stubs\AllGoneWrongLogsStorage;
 
 /**
- * @coversDefaultClass \Brezgalov\ExtApiLogger\v2\DataStorage\UseCases\StoreApiCallLogUseCase
+ * @covers \Brezgalov\ExtApiLogger\v2\DataStorage\UseCases\StoreApiCallLogUseCase
  */
 class StoreApiCallLogFailureTest extends StoreApiCallLogSuccessTest
 {

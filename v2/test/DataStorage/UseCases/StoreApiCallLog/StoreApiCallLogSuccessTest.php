@@ -11,7 +11,7 @@ use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\DataStorage\Stubs\AllFineLogsSto
 use Throwable;
 
 /**
- * @coversDefaultClass \Brezgalov\ExtApiLogger\v2\DataStorage\UseCases\StoreApiCallLogUseCase
+ * @covers \Brezgalov\ExtApiLogger\v2\DataStorage\UseCases\StoreApiCallLogUseCase
  */
 class StoreApiCallLogSuccessTest extends BaseTestCase
 {

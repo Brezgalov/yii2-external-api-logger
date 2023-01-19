@@ -4,8 +4,10 @@ namespace Brezgalov\ExtApiLogger\v2\Tests\Interactors\Commands\AbstractSendApiRe
 
 use Brezgalov\ExtApiLogger\v2\Interactors\Commands\AbstractSendApiRequestCommand;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog;
-use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\Interactors\Commands\DummySendApiRequestCommand;
 
+/**
+ * @covers \Brezgalov\ExtApiLogger\v2\Interactors\Commands\AbstractSendApiRequestCommand
+ */
 class SendApiCommandSuccessTest extends BaseSendApiCommandTestCase
 {
     private AbstractSendApiRequestCommand $command;
@@ -13,6 +15,8 @@ class SendApiCommandSuccessTest extends BaseSendApiCommandTestCase
     protected function prepare(): void
     {
         parent::prepare();
+
+        $this->requestTime = time();
 
         $this->command = $this->makeDummyCommand(function() {
             return new ApiResponseLog(

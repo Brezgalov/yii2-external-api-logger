@@ -1,22 +1,26 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\v2\Tests\Interactors\Models;
+namespace Brezgalov\ExtApiLogger\v2\Tests\Interactors\Exceptions;
 
-use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiCallLog;
+use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiRequestLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiRequestLog;
-use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog;
 use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\Interactors\Models\BaseLogTestCase;
 
 /**
- * @covers \Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiCallLog
+ * @covers \Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiRequestLogException
  */
-class ApiCallLogTest extends BaseLogTestCase
+class ApiRequestLogExceptionTest extends BaseLogTestCase
 {
-    private ApiCallLog $callLog;
+    private ApiRequestLogException $requestException;
+
+    protected function prepare(): void
+    {
+        $this->prepareRequestDummyData();
+    }
 
     protected function do(): void
     {
-        $this->callLog = new ApiCallLog(
+        $this->requestException = new ApiRequestLogException(
             new ApiRequestLog(
                 $this->requestMethod,
                 $this->requestUrl,
@@ -28,17 +32,12 @@ class ApiCallLogTest extends BaseLogTestCase
                 $this->actionName,
                 $this->userAuthorizedId,
                 $this->requestTime
-            ),
-            new ApiResponseLog(
-                $this->responseStatusCode,
-                $this->responseContent,
-                $this->responseTime
             )
         );
     }
 
     protected function validate(): void
     {
-        $this->validateCallLog($this->callLog);
+        $this->validateRequestLog($this->requestException);
     }
 }

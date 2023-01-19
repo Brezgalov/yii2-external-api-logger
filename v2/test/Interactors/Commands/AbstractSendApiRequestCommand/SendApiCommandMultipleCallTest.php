@@ -5,9 +5,11 @@ namespace Brezgalov\ExtApiLogger\v2\Tests\Interactors\Commands\AbstractSendApiRe
 use Brezgalov\ExtApiLogger\v2\Interactors\Commands\AbstractSendApiRequestCommand;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\CommandAlreadyExecutedException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog;
-use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\Interactors\Commands\DummySendApiRequestCommand;
 use Throwable;
 
+/**
+ * @covers \Brezgalov\ExtApiLogger\v2\Interactors\Commands\AbstractSendApiRequestCommand
+ */
 class SendApiCommandMultipleCallTest extends BaseSendApiCommandTestCase
 {
     private AbstractSendApiRequestCommand $command;

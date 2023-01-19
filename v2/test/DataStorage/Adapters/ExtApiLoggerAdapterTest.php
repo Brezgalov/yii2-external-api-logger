@@ -9,7 +9,7 @@ use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog;
 use Brezgalov\ExtApiLogger\v2\Tests\TestClasses\BaseTestCase;
 
 /**
- * @coversDefaultClass \Brezgalov\ExtApiLogger\v2\DataStorage\Adapters\ExtApiLoggerAdapter
+ * @covers \Brezgalov\ExtApiLogger\v2\DataStorage\Adapters\ExtApiLoggerAdapter
  */
 class ExtApiLoggerAdapterTest extends BaseTestCase
 {
