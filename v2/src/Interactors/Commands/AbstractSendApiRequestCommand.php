@@ -46,13 +46,12 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
      */
     private function initYii2Components()
     {
-        /** @var Controller $controller */
-        $controller = \Yii::$app->get('controller', false);
+        $controller = \Yii::$app->controller ?? null;
 
         if ($controller) {
             $this->controllerName = $controller->id;
 
-            if ($controller->action) {
+            if (isset($controller->action)) {
                 $this->actionName = $controller->action->id;
             }
         }
