@@ -1,6 +1,6 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
+namespace Brezgalov\ExtApiLogger\v2\Interactors\Containers;
 
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiCallLog;
 

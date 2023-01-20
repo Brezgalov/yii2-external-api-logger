@@ -2,6 +2,7 @@
 
 namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
 
+use Brezgalov\ExtApiLogger\v2\Interactors\Containers\IApiCallLogContainer;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiCallLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiRequestLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\CommandAlreadyExecutedException;
