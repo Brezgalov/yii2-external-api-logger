@@ -12,7 +12,6 @@ use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiCallLog;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiRequestLog;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiResponseLog;
 use Throwable;
-use yii\base\Controller;
 use yii\web\User;
 
 /**
@@ -163,7 +162,7 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
         return $log;
     }
 
-    protected function onResponseThrown(IApiRequestLog $requestLog, IApiResponseLogThrowable $responseLogThrown): IApiCallLog
+    protected function onResponseThrown(IApiRequestLog $requestLog, IApiResponseLogThrowable $responseLogThrown): void
     {
         throw new ApiCallLogException(
             new ApiCallLog(
@@ -176,7 +175,7 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
         );
     }
 
-    protected function onExceptionThrown(IApiRequestLog $requestLog, Throwable $ex): IApiCallLog
+    protected function onExceptionThrown(IApiRequestLog $requestLog, Throwable $ex): void
     {
         throw new ApiRequestLogException(
             $requestLog,
