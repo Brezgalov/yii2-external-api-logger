@@ -18,7 +18,7 @@ class ApiCallLogsCollectionException extends Exception implements IApiCallLogsCo
      */
     public static function makeFromLogsCollectionAndLogThrowable(
         IApiCallLogsCollection $apiCallLogsCollection,
-        IApiCallLogThrowable|IApiCallLogsCollectionThrowable $throwable
+        Throwable $throwable
     ): ApiCallLogsCollectionException
     {
         $selfInstance = new self(
