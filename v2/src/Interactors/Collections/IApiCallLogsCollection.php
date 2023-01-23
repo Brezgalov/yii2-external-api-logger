@@ -7,4 +7,6 @@ use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiCallLog;
 interface IApiCallLogsCollection extends \Iterator
 {
     public function current(): IApiCallLog;
+
+    public function toArray(): array;
 }
