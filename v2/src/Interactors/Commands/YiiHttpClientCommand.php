@@ -12,13 +12,11 @@ use yii\httpclient\Response;
 
 abstract class YiiHttpClientCommand extends AbstractSendApiRequestCommand
 {
-    protected Request $httpRequest;
+    private Request $httpRequest;
 
-    public function __construct(Request $httpRequest)
+    protected function setRequest(Request $httpRequest)
     {
-        $this->httpRequest = $httpRequest;
-
-        parent::__construct();
+        $this->httpRequest = clone $httpRequest;
     }
 
     protected function getRequestMethod(): string
