@@ -6,5 +6,5 @@ use Brezgalov\ExtApiLogger\v2\Interactors\Collections\IApiCallLogsCollection;
 
 interface IStoreApiCallLogsCollectionUseCase
 {
-    public function storeLog(IApiCallLogsCollection $log): void;
+    public function storeLog(IApiCallLogsCollection $logsCollection): void;
 }

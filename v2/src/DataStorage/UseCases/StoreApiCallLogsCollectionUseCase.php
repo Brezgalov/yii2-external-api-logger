@@ -14,8 +14,10 @@ class StoreApiCallLogsCollectionUseCase implements IStoreApiCallLogsCollectionUs
         $this->storeUseCase = new StoreApiCallLogUseCase($extApiLogsStorage);
     }
 
-    public function storeLog(IApiCallLogsCollection $log): void
+    public function storeLog(IApiCallLogsCollection $logsCollection): void
     {
-        $this->storeUseCase->storeLog($log);
+        foreach ($logsCollection as $log) {
+            $this->storeUseCase->storeLog($log);
+        }
     }
 }
