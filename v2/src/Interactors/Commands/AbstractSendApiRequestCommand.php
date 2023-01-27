@@ -70,8 +70,7 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
             throw new CommandAlreadyExecutedException("Выполнение команды {$class} допустимо исключительно один раз");
         }
 
-        $requestLog = $this->makeRequestLog();
-        $this->tryCallApi($requestLog);
+        $this->tryCallApi();
 
         return $this;
     }
@@ -127,9 +126,10 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
         return $this->userAuthorizedId;
     }
 
-    private function tryCallApi(IApiRequestLog $requestLog): void
+    private function tryCallApi(): void
     {
         try {
+            $requestLog = $this->getApiRequestLog();
             $responseLog = $this->processApiRequest();
 
             $this->onSuccess(
@@ -138,15 +138,20 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
             );
         } catch (IApiResponseLogThrowable $responseLogThrown) {
             $this->onResponseThrown(
-                $requestLog,
+                $this->getApiRequestLog(),
                 $responseLogThrown
             );
         } catch (Throwable $ex) {
             $this->onExceptionThrown(
-                $requestLog,
+                $this->getApiRequestLog(),
                 $ex
             );
         }
+    }
+
+    protected function getApiRequestLog(): IApiRequestLog
+    {
+        return $this->makeRequestLog();
     }
 
     protected abstract function processApiRequest(): IApiResponseLog;
