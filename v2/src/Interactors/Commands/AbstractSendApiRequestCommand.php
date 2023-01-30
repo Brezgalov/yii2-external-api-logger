@@ -129,11 +129,10 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, 
     private function tryCallApi(): void
     {
         try {
-            $requestLog = $this->getApiRequestLog();
             $responseLog = $this->processApiRequest();
 
             $this->onSuccess(
-                $requestLog,
+                $this->getApiRequestLog(),
                 $responseLog
             );
         } catch (IApiResponseLogThrowable $responseLogThrown) {
