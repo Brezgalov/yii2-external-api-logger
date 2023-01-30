@@ -2,6 +2,7 @@
 
 namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
 
+use Brezgalov\ExtApiLogger\v2\Interactors\Builders\ApiErrorMessageBuilder;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiServiceTemporaryUnavailable;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiResponseLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiResponseLog;
@@ -96,18 +97,23 @@ abstract class YiiHttpClientCommand extends AbstractSendApiRequestCommand
 
     protected function getServiceUnavailableMessage(?string $details = null): string
     {
-        $details = $details ? "Подробности: {$details}." : null;
+        $errorBuilder = new ApiErrorMessageBuilder();
 
-        return "Не удается получить доступ к удаленному сервису. {$this->getRequestInfoTag()} {$this->getActivityIdInfoTag()} {$details}";
-    }
+        if ($this->activityId) {
+            $errorBuilder->setActivityId($this->activityId);
+        }
 
-    private function getRequestInfoTag(): string
-    {
-        return "Request: [{$this->getRequestGroup()}/{$this->getRequestId()}].";
-    }
+        if ($this->requestId && $this->requestGroup) {
+            $errorBuilder->setRequestDetails(
+                $this->requestId,
+                $this->requestGroup
+            );
+        }
 
-    private function getActivityIdInfoTag(): string
-    {
-        return "ActivityId: [{$this->getActivityId()}].";
+        if ($details) {
+            $errorBuilder->setErrorMsgDetails($details);
+        }
+
+        return $errorBuilder->makeErrorMessage();
     }
 }
