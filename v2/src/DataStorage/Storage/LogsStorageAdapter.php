@@ -1,18 +1,13 @@
 <?php
 
-namespace Brezgalov\ExtApiLogger\v2\DataStorage\UseCases;
+namespace Brezgalov\ExtApiLogger\v2\DataStorage\Storage;
 
+use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
 use Brezgalov\ExtApiLogger\v2\DataStorage\Adapters\ExtApiLoggerAdapter;
 use Brezgalov\ExtApiLogger\v2\DataStorage\Exceptions\LogStorageException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiCallLog;
-use Brezgalov\ExtApiLogger\LogsStorage\ILogsStorage;
-use Brezgalov\ExtApiLogger\v2\DataStorage\Storage\IApiCallLogsStorage;
 
-/**
- * @deprecated
- * @see IApiCallLogsStorage
- */
-class StoreApiCallLogUseCase implements IStoreApiCallLogUseCase
+class LogsStorageAdapter extends AbstractApiCallLogsStorage
 {
     private ILogsStorage $extApiLogsStorage;
 
@@ -21,7 +16,7 @@ class StoreApiCallLogUseCase implements IStoreApiCallLogUseCase
         $this->extApiLogsStorage = $extApiLogsStorage;
     }
 
-    public function storeLog(IApiCallLog $log): void
+    public function storeSingleLog(IApiCallLog $log): void
     {
         $adapter = new ExtApiLoggerAdapter($log);
 
