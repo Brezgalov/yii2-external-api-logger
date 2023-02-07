@@ -62,7 +62,7 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand
         }
     }
 
-    public function sendApiRequest(): ISendApiRequestCommand
+    public function sendApiRequest(): mixed
     {
         if ($this->callLog) {
             $class = get_called_class();
@@ -71,23 +71,10 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand
 
         $this->tryCallApi();
 
-        return $this;
+        return $this->getApiResponse();
     }
 
-    protected function makeRequestLog(): IApiRequestLog
-    {
-        return new ApiRequestLog(
-            $this->getRequestMethod(),
-            $this->getRequestUrl(),
-            $this->getRequestInput(),
-            $this->getActivityId(),
-            $this->getRequestGroup(),
-            $this->getRequestId(),
-            $this->getControllerName(),
-            $this->getActionName(),
-            $this->getUserAuthorizedId()
-        );
-    }
+    protected abstract function getApiResponse(): mixed;
 
     protected abstract function getRequestMethod(): string;
 
@@ -147,12 +134,27 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand
         }
     }
 
+    protected abstract function processApiRequest(): IApiResponseLog;
+
     protected function getApiRequestLog(): IApiRequestLog
     {
         return $this->makeRequestLog();
     }
 
-    protected abstract function processApiRequest(): IApiResponseLog;
+    protected function makeRequestLog(): IApiRequestLog
+    {
+        return new ApiRequestLog(
+            $this->getRequestMethod(),
+            $this->getRequestUrl(),
+            $this->getRequestInput(),
+            $this->getActivityId(),
+            $this->getRequestGroup(),
+            $this->getRequestId(),
+            $this->getControllerName(),
+            $this->getActionName(),
+            $this->getUserAuthorizedId()
+        );
+    }
 
     protected function onSuccess(IApiRequestLog $requestLog, IApiResponseLog $responseLog): IApiCallLog
     {

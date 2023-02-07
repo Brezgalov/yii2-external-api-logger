@@ -23,29 +23,29 @@ class StoreLogsCommandDecorator implements ISendApiRequestCommand
         $this->command = $command;
     }
 
-    public function sendApiRequest(): ISendApiRequestCommand
+    public function sendApiRequest(): mixed
     {
         try {
-            $this->command->sendApiRequest();
+            $response = $this->command->sendApiRequest();
 
-            $this->storeResponse(
+            $this->storeRequestLog(
                 $this->command->getApiCallLog()
             );
 
-            return $this;
+            return $response;
         } catch (Throwable $ex) {
-            $this->storeResponse($ex);
+            $this->storeRequestLog($ex);
 
             throw $ex;
         }
     }
 
-    private function storeResponse(mixed $response): void
+    private function storeRequestLog(mixed $log): void
     {
-        if ($response instanceof IApiCallLog) {
-            $this->logsStorage->storeSingleLog($response);
-        } elseif ($response instanceof IApiCallLogsCollection) {
-            $this->logsStorage->storeLogsCollection($response);
+        if ($log instanceof IApiCallLog) {
+            $this->logsStorage->storeSingleLog($log);
+        } elseif ($log instanceof IApiCallLogsCollection) {
+            $this->logsStorage->storeLogsCollection($log);
         }
     }
 
