@@ -2,7 +2,9 @@
 
 namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
 
-interface ISendApiRequestCommand
+use Brezgalov\ExtApiLogger\v2\Interactors\Containers\IApiCallLogContainer;
+
+interface ISendApiRequestCommand extends IApiCallLogContainer
 {
     public function sendApiRequest(): ISendApiRequestCommand;
 }

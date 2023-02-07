@@ -2,7 +2,6 @@
 
 namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
 
-use Brezgalov\ExtApiLogger\v2\Interactors\Containers\IApiCallLogContainer;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiCallLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiRequestLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\CommandAlreadyExecutedException;
@@ -25,7 +24,7 @@ use yii\web\User;
  * * При необходимости метод отдачи можно представить в виде отдельного интерфейса и апеллировать к нему
  *   см. аналогию с IApiCallLogContainer
  */
-abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand, IApiCallLogContainer
+abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand
 {
     protected ?string $activityId = null;
     protected ?string $controllerName = null;
