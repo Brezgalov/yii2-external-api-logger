@@ -71,10 +71,8 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand
 
         $this->tryCallApi();
 
-        return $this->getApiResponse();
+        return null;
     }
-
-    protected abstract function getApiResponse(): mixed;
 
     protected abstract function getRequestMethod(): string;
 
