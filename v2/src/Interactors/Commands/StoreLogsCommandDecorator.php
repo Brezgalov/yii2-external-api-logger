@@ -5,6 +5,7 @@ namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
 use Brezgalov\ExtApiLogger\v2\DataStorage\Storage\IApiCallLogsStorage;
 use Brezgalov\ExtApiLogger\v2\Interactors\Collections\IApiCallLogsCollection;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\IApiCallLog;
+use Throwable;
 
 /**
  * Use this decorator to save logs on sendApiRequest call
