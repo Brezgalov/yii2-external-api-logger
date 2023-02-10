@@ -13,7 +13,7 @@ use Throwable;
 class StoreLogsCommandDecorator implements ISendApiRequestCommand
 {
     private IApiCallLogsStorage $logsStorage;
-    private ISendApiRequestCommand $command;
+    protected ISendApiRequestCommand $command;
 
     public function __construct(
         IApiCallLogsStorage $logsStorage,
