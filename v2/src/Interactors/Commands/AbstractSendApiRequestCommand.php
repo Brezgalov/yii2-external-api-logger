@@ -3,7 +3,6 @@
 namespace Brezgalov\ExtApiLogger\v2\Interactors\Commands;
 
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiCallLogException;
-use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\ApiRequestLogException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\CommandAlreadyExecutedException;
 use Brezgalov\ExtApiLogger\v2\Interactors\Exceptions\IApiResponseLogThrowable;
 use Brezgalov\ExtApiLogger\v2\Interactors\Models\ApiCallLog;
@@ -127,10 +126,7 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand
                 $responseLogThrown
             );
         } catch (Throwable $ex) {
-            $this->onExceptionThrown(
-                $this->getApiRequestLog(),
-                $ex
-            );
+            $this->onExceptionThrown($ex);
         }
     }
 
@@ -181,14 +177,9 @@ abstract class AbstractSendApiRequestCommand implements ISendApiRequestCommand
         );
     }
 
-    protected function onExceptionThrown(IApiRequestLog $requestLog, Throwable $ex): void
+    protected function onExceptionThrown(Throwable $ex): void
     {
-        throw new ApiRequestLogException(
-            $requestLog,
-            $ex->getMessage(),
-            $ex->getCode(),
-            $ex
-        );
+        throw $ex;
     }
 
     protected function storeApiCallLog(IApiCallLog $log): void
